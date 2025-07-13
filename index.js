@@ -1,59 +1,63 @@
 const express = require("express");
-const jwt = require("jsonwebtoken");
-const { UserModel,TodoModel } = require("./db");
+const { UserModel, TodoModel } = require("./db");
+
 const app = express();
 app.use(express.json());
-app.post("/signup",function(req, res){
-    const email = req.body.email;
-    const name = req.body.name;
-    const password = req.body.password;
 
+// ✅ Make the function async to use await
+app.post("/signup", async function(req, res) {
+    const { email, name, password } = req.body;
 
     await UserModel.create({
-    email: email,
-    password: password,
-    name: name
+        email: "abhidb32@gmail.com",
+        name: "abhi",
+        password: "123"
+    });
+
+    res.json({
+        message: "you are logged in"
+    });
 });
 
-res.json({
-    message: "you are logged in"
-});
 
-
-});
-
-app.post("/signin",async function(req, res){
+app.post("/signin", async function (req, res) {
     const email = req.body.email;
     const password = req.body.password;
-    
+
     const user = await UserModel.findOne({
         email: email,
         password: password
-    })
+    });
+
     console.log(user);
 
-    if (user){
-        const token = jwt.sign({
-            id: user._id
-        });
+    if (user) {
+        // ✅ Add a secret key here (required)
+        const token = jwt.sign(
+            { id: user._id },
+            "your_secret_key" // Replace with a real secret in production
+        );
+
         res.json({
             token: token
         });
-    }else{
+    } else {
         res.status(403).json({
-            message: "Incorrect  credentials"
-        })
+            message: "Incorrect credentials"
+        });
     }
-
 });
 
-app.get("/todo",function(req, res){
-
+// Dummy GET route for todos (not yet implemented)
+app.get("/todo", function (req, res) {
+    res.send("Get todos route coming soon!");
 });
 
-app.post("/todos",function(req, res){
-
+// Dummy POST route for creating todos (not yet implemented)
+app.post("/todos", function (req, res) {
+    res.send("Create todos route coming soon!");
 });
+
 app.listen(3000, () => {
     console.log("Server running on http://localhost:3000");
 });
