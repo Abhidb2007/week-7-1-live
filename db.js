@@ -7,3 +7,9 @@ const User = new Schema({
     name: string
 
 })
+
+const Todo = new Schema({
+    title: String,
+    done: Boolean,
+    userId: ObjectId
+})
