@@ -5,7 +5,7 @@ app.use(express.json());
 app.post("/signup",function(req, res){
     const email = req.body.email;
     const name = req.body.name;
-    const password = req.body.name;
+    const password = req.body.password;
 
 
     await UserModel.insert({
@@ -20,7 +20,7 @@ app.post("/signup",function(req, res){
 });
 
 app.post("/signin",async function(req, res){
-    const email = req.body.eamil;
+    const email = req.body.email;
     const password = req.body.password;
     
     const user = await UserModel.findOne({
@@ -35,7 +35,7 @@ app.post("/signin",async function(req, res){
         });
         res.json({
             token: token
-        })
+        });
     }else{
         res.status(403).json({
             message: "Incorrect  credentials"
