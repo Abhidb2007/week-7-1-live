@@ -1,6 +1,11 @@
 const express = require("express");
 const app = express();
 app.post("/signup",function(req, res){
+    User.insert({
+        name: "abhi",
+        password: "123",
+        email: "abhishekdb81@gmail.com"
+    })
 
 });
 
