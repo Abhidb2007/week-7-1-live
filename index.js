@@ -12,6 +12,9 @@ app.post("/signup",function(req, res){
         password: "123",
         email: "abhishekdb81@gmail.com"
     })
+    res.json({
+        message: "you are logged in"
+    })
 
 });
 
