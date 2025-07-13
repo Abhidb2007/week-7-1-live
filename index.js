@@ -12,6 +12,6 @@ app.get("/todo",function(req, res){
 
 })
 
-app.post("/todos",function(req, res){
+app.post("/todo",function(req, res){
 
 })
