@@ -19,7 +19,28 @@ app.post("/signup",function(req, res){
 
 });
 
-app.post("/signin",function(req, res){
+app.post("/signin",async function(req, res){
+    const email = req.body.eamil;
+    const password = req.body.password;
+    
+    const user = await UserModel.findOne({
+        email: email,
+        password: password
+    })
+    console.log(user);
+
+    if (user){
+        const token = jwt.sign({
+            id: user._id
+        });
+        res.json({
+            token: token
+        })
+    }else{
+        res.status(403).json({
+            message: "Incorrect  credentials"
+        })
+    }
 
 });
 
