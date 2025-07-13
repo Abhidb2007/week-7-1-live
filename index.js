@@ -9,9 +9,9 @@ app.post("/signup", async function(req, res) {
     const { email, name, password } = req.body;
 
     await UserModel.create({
-        email: "abhidb32@gmail.com",
-        name: "abhi",
-        password: "123"
+        email: email,
+        name: name,
+        password: password
     });
 
     res.json({
