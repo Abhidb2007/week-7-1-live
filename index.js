@@ -1,6 +1,7 @@
 const express = require("express");
 const { UserModel,TodoModel } = require("./db");
 const app = express();
+app.use(express.json());
 app.post("/signup",function(req, res){
     const email = req.body.email;
     const name = req.body.name;
