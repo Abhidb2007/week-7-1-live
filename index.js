@@ -8,10 +8,10 @@ app.post("/signup",function(req, res){
     const password = req.body.name;
 
 
-    UserModel.insert({
-        name: "abhi",
-        password: "123",
-        email: "abhishekdb81@gmail.com"
+    await UserModel.insert({
+        email: email,
+        password: password,
+        name: name
     })
     res.json({
         message: "you are logged in"
