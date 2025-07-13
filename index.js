@@ -1,4 +1,5 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
 const { UserModel,TodoModel } = require("./db");
 const app = express();
 app.use(express.json());
@@ -53,4 +54,6 @@ app.get("/todo",function(req, res){
 app.post("/todos",function(req, res){
 
 });
-app.listen(3000);
+app.listen(3000, () => {
+    console.log("Server running on http://localhost:3000");
+});
