@@ -70,9 +70,9 @@ app.get("/todos", function (req, res) {
 
 });
 function auth(req, res, next){    
-    const token = req.header.token;
+    const token = req.headers.token;
     const decodedData = jwt.verify(token,JWT_SECRET);
-    if(decodeData){
+    if(decodedData){
         req.userId = decodedData.userId;
         next();
     }else{
