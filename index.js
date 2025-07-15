@@ -58,7 +58,12 @@ app.get("/todo", function (req, res) {
 
 // Dummy POST route for creating todos (not yet implemented)
 app.post("/todos", function (req, res) {
-    
+    const token = req.header.token;
+    const decodedData = jwt.verify(token,JWT_SECRET);
+    if(decodeData){
+        req.userId = decodedData.userId;
+        
+    }
 });
 
 app.listen(3000, () => {
