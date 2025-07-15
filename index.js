@@ -57,16 +57,26 @@ app.get("/todo", function (req, res) {
 });
 
 // Dummy POST route for creating todos (not yet implemented)
-app.post("/todos", function (req, res) {
-    
+app.get("/todos", function (req, res) {
+    const userId = req. userID;
+    res.json({
+        userId: userId
+    })
+
+});
+function auth(req, res, next){    
     const token = req.header.token;
     const decodedData = jwt.verify(token,JWT_SECRET);
     if(decodeData){
         req.userId = decodedData.userId;
-        
+        next();
+    }else{
+       res.status(403).json({
+        message: "Incorrect credentials"
+      }); 
     }
-});
 
+}
 app.listen(3000, () => {
     console.log("Server running on http://localhost:3000");
 });
