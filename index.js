@@ -3,7 +3,7 @@ const { UserModel, TodoModel } = require("./db");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const JWT_SECRET = "asdasd123@gmail.com";
-mongoose.connect("mongodb+srv://abhishekdb81:THYf1pxFUFGp1tdA@cluster0.jxuqvgh.mongodb.net/")
+
 const app = express();
 app.use(express.json());
 
@@ -58,7 +58,7 @@ app.get("/todo", function (req, res) {
 
 // Dummy POST route for creating todos (not yet implemented)
 app.post("/todos", function (req, res) {
-    res.send("Create todos route coming soon!");
+    
 });
 
 app.listen(3000, () => {
