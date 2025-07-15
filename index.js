@@ -53,8 +53,13 @@ app.post("/signin", async function (req, res) {
 
 // Dummy GET route for todos (not yet implemented)
 app.get("/todo", function (req, res) {
-    
+     const userId = req. userID;
+    res.json({
+        userId: userId
+    })
+
 });
+
 
 // Dummy POST route for creating todos (not yet implemented)
 app.get("/todos", function (req, res) {
