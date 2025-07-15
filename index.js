@@ -1,87 +1,64 @@
 const express = require("express");
 const { UserModel, TodoModel } = require("./db");
 const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
 const JWT_SECRET = "asdasd123@gmail.com";
 
 const app = express();
 app.use(express.json());
 
-// ✅ Make the function async to use await
-app.post("/signup", async function(req, res) {
+// ✅ Middleware to protect routes
+function auth(req, res, next) {
+    const token = req.headers.authorization;
+
+    if (!token) {
+        return res.status(403).json({ message: "No token provided" });
+    }
+
+    try {
+        const decodedData = jwt.verify(token, JWT_SECRET);
+        req.userId = decodedData.userId; // must match what you encoded
+        next();
+    } catch (err) {
+        res.status(403).json({ message: "Invalid token" });
+    }
+}
+
+// ✅ Signup Route
+app.post("/signup", async function (req, res) {
     const { email, name, password } = req.body;
 
-    await UserModel.create({
-        email: email,
-        name: name,
-        password: password
-    });
+    await UserModel.create({ email, name, password });
 
-    res.json({
-        message: "you are logged in"
-    });
+    res.json({ message: "You are signed up" });
 });
 
-
+// ✅ Signin Route
 app.post("/signin", async function (req, res) {
-    const email = req.body.email;
-    const password = req.body.password;
+    const { email, password } = req.body;
 
-    const user = await UserModel.findOne({
-        email: email,
-        password: password
-    });
-
-    console.log(user);
+    const user = await UserModel.findOne({ email, password });
 
     if (user) {
-        // ✅ Add a secret key here (required)
-        const token = jwt.sign(
-            { id: user._id },
-            "your_secret_key" // Replace with a real secret in production
-        );
+        const token = jwt.sign({ userId: user._id }, JWT_SECRET); // ✅ match key
 
-        res.json({
-            token: token
-        });
+        res.json({ token });
     } else {
-        res.status(403).json({
-            message: "Incorrect credentials"
-        });
+        res.status(403).json({ message: "Incorrect credentials" });
     }
 });
 
-// Dummy GET route for todos (not yet implemented)
-app.get("/todo", function (req, res) {
-     const userId = req. userID;
-    res.json({
-        userId: userId
-    })
-
+// ✅ Protected Route: Get ToDos
+app.get("/todo", auth, function (req, res) {
+    const userId = req.userId;
+    res.json({ message: "Get todos", userId });
 });
 
-
-// Dummy POST route for creating todos (not yet implemented)
-app.get("/todos", function (req, res) {
-    const userId = req. userID;
-    res.json({
-        userId: userId
-    })
-
+// ✅ Protected Route: Create ToDos
+app.post("/todos", auth, function (req, res) {
+    const userId = req.userId;
+    res.json({ message: "Create todo", userId });
 });
-function auth(req, res, next){    
-    const token = req.headers.token;
-    const decodedData = jwt.verify(token,JWT_SECRET);
-    if(decodedData){
-        req.userId = decodedData.userId;
-        next();
-    }else{
-       res.status(403).json({
-        message: "Incorrect credentials"
-      }); 
-    }
 
-}
 app.listen(3000, () => {
     console.log("Server running on http://localhost:3000");
 });
