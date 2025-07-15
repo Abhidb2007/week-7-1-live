@@ -53,11 +53,12 @@ app.post("/signin", async function (req, res) {
 
 // Dummy GET route for todos (not yet implemented)
 app.get("/todo", function (req, res) {
-    res.send("Get todos route coming soon!");
+    
 });
 
 // Dummy POST route for creating todos (not yet implemented)
 app.post("/todos", function (req, res) {
+    
     const token = req.header.token;
     const decodedData = jwt.verify(token,JWT_SECRET);
     if(decodeData){
