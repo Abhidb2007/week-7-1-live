@@ -13,8 +13,14 @@ app.use(express.json());
 // SIGNUP ROUTE
 app.post("/signup", async function(req, res) {
     const { email, password, name } = req.body;
+    if(typeof email !== "string" || email.length < 5 ||!email.includes("@")){
+        res.json({
+            message: "Email incorrect"
+        })
+        return
+    }
 
-    const hashedPassword = await bcrypt.hash(password, 8);
+    const hashedPassword = await bcrypt.hash(password, 5);
     console.log("Hashed Password:", hashedPassword);
 
     await UserModel.create({
@@ -48,6 +54,6 @@ app.post("/signin", async function(req, res) {
     }
 });
 
-app.listen(4000, () => {
-    console.log("Server running on port 4000");
+app.listen(3000, () => {
+    console.log("Server running on port 3000");
 });
