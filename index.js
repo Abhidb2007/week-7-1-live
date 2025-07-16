@@ -1,54 +1,53 @@
 const bcrypt = require("bcrypt");
 const express = require("express");   
 const { UserModel, TodoModel } = require("./db");
-const {auth,JWT_SECRET} = require("./auth");
+const { auth, JWT_SECRET } = require("./auth");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 
-mongoose.connect("");
- const app = express();
- app.use(express.json());
+mongoose.connect("mongodb://localhost:27017/mydatabase"); // Add your MongoDB URI
 
+const app = express();
+app.use(express.json());
 
-app.post("/signup",function(req, res){
-    const email = req.body.email;
-    const password = req.body.password;
-    const name = req.body.name;
-    // promsify the fs funntion call
+// SIGNUP ROUTE
+app.post("/signup", async function(req, res) {
+    const { email, password, name } = req.body;
 
-    const hashedPassword = await bcrypt.hash(password,5);
-    consolelog(hashedPassword);
+    const hashedPassword = await bcrypt.hash(password, 5);
+    console.log("Hashed Password:", hashedPassword);
 
     await UserModel.create({
         email: email,
         password: hashedPassword,
         name: name
     });
+
     res.json({
-        message: "you are signed up"
-    })
-});
-app.post("/signin",function(req, res){
-    const email = req.body.email;
-    const password = req.body.password;
-
-    const response = await UserModel.findOne({
-        email: email,
-        password: password,
+        message: "You are signed up"
     });
+});
 
-    if(response){
-        const token = jwt.sign({
-            id:response._id.toString()
-        },JWT_SECRET);
-        res.json({
-            token: token
-        })
-    }else{
-        res.status(403).json({
-            message: "Incorrect credentials"
-        })
+// SIGNIN ROUTE
+app.post("/signin", async function(req, res) {
+    const { email, password } = req.body;
+
+    const user = await UserModel.findOne({ email });
+
+    if (!user) {
+        return res.status(403).json({ message: "User not found" });
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+    if (isPasswordCorrect) {
+        const token = jwt.sign({ id: user._id.toString() }, JWT_SECRET);
+        res.json({ token });
+    } else {
+        res.status(403).json({ message: "Incorrect credentials" });
     }
 });
 
-app.listen(3000);
+app.listen(3000, () => {
+    console.log("Server running on port 3000");
+});
