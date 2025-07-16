@@ -20,7 +20,7 @@ app.post("/signup", async function(req, res) {
 
 
     })
-    const parseData = requiredBody.parse(req.body);
+    //const parsedData = requiredBody.parse(req.body);
     const parsedDatawithSuccess = requiredBody.safeParse(req.body);
 
 
