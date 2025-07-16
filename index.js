@@ -1,4 +1,5 @@
-const express = require("express");
+const bcrypt = require("bcrypt");
+const express = require("express");   
 const { UserModel, TodoModel } = require("./db");
 const {auth,JWT_SECRET} = require("./auth");
 const jwt = require("jsonwebtoken");
@@ -13,10 +14,14 @@ app.post("/signup",function(req, res){
     const email = req.body.email;
     const password = req.body.password;
     const name = req.body.name;
+    // promsify the fs funntion call
+
+    const hashedPassword = await bcrypt.hash(password,5);
+    consolelog(hashedPassword);
 
     await UserModel.create({
         email: email,
-        password: password,
+        password: hashedPassword,
         name: name
     });
     res.json({
