@@ -4,6 +4,7 @@ const { UserModel, TodoModel } = require("./db");
 const { auth, JWT_SECRET } = require("./auth");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
+const { z } = require("zod");
 
 mongoose.connect("mongodb://localhost:27017/mydatabase"); // Add your MongoDB URI
 
@@ -12,6 +13,17 @@ app.use(express.json());
 
 // SIGNUP ROUTE
 app.post("/signup", async function(req, res) {
+    const requiredBody = z.object({
+        email: z.string(),
+        password: z.string,
+        name: z.string
+
+
+    })
+    const parseData = requiredBody.parse(req.body);
+    const parsedDatawithSuccess = requiredBody.safeParse(req.body);
+
+
     const { email, password, name } = req.body;
     if(typeof email !== "string" || email.length < 5 ||!email.includes("@")){
         res.json({
