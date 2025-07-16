@@ -14,7 +14,7 @@ app.use(express.json());
 app.post("/signup", async function(req, res) {
     const { email, password, name } = req.body;
 
-    const hashedPassword = await bcrypt.hash(password, 5);
+    const hashedPassword = await bcrypt.hash(password, 8);
     console.log("Hashed Password:", hashedPassword);
 
     await UserModel.create({
